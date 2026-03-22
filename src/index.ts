@@ -1,27 +1,81 @@
+import "dotenv/config";
 import promptSync from "prompt-sync";
+import { Statement } from "./domain/statement";
+import {
+  saveStatement,
+  statementExists,
+  listStatements,
+} from "./services/file.service";
+import { askAmount, askPeriod } from "./utils/validation";
+import { logSuccess, logError, logWarning } from "./ui/logger";
+import { MENU_OPTIONS } from "./constants/menu";
+import { t } from "./i18n/messages";
+
 const prompt = promptSync();
 
-type Currency = "USD" | "MXN";
+console.log(t("title"));
+console.log(t("menu.create"));
+console.log(t("menu.view"));
+console.log(t("menu.exit"));
 
-const exchangeRates: Record<Currency, Record<Currency, number>> = {
-  USD: { MXN: 17.5, USD: 1 },
-  MXN: { USD: 0.057, MXN: 1 },
-};
+const option = prompt(t("menu.choose"));
 
-function convert(amount: number, from: Currency, to: Currency): number {
-  const rate = exchangeRates[from][to];
-  return amount * rate;
+if (option === MENU_OPTIONS.CREATE_STATEMENT) {
+  try {
+    let id: string;
+
+    while (true) {
+      id = askPeriod(prompt, t("statement.period"));
+
+      if (statementExists(id)) {
+        logError(t("statement.exists"));
+      } else {
+        break;
+      }
+    }
+
+    const totalCharges = askAmount(prompt, t("statement.totalCharges"));
+    const totalPayments = askAmount(prompt, t("statement.totalPayments"));
+
+    const statement: Statement = {
+      id,
+      period: {
+        start: new Date(`${id}-01`),
+        end: new Date(`${id}-28`),
+      },
+      totals: {
+        charges: totalCharges,
+        payments: totalPayments,
+      },
+      transactions: [],
+    };
+
+    saveStatement(statement);
+
+    logSuccess(t("statement.saved"));
+  } catch (error) {
+    if ((error as Error).message === "EXIT") {
+      logWarning("Operación cancelada");
+    } else {
+      logError((error as Error).message);
+    }
+  }
 }
 
-console.log("=== Conversor de Divisas (USD ↔ MXN) ===");
+if (option === MENU_OPTIONS.VIEW_STATEMENTS) {
+  const statements = listStatements();
 
-const amount = parseFloat(prompt("Ingresa la cantidad: "));
-const from = prompt("Moneda origen (USD/MXN): ") as Currency;
-const to = prompt("Moneda destino (USD/MXN): ") as Currency;
+  if (statements.length === 0) {
+    logWarning(t("statement.empty"));
+  } else {
+    logSuccess(t("statement.list"));
+    statements.forEach(statement => console.log("-", statement));
+  }
 
-if (!exchangeRates[from] || !exchangeRates[to]) {
-  console.log("❌ Moneda no soportada.");
-} else {
-  const result = convert(amount, from, to);
-  console.log(`${amount} ${from} → ${to} = ${result.toFixed(2)}`);
+
+}
+
+if (option === MENU_OPTIONS.EXIT) {
+  logSuccess(t("common.exit"));
+  process.exit(0);
 }

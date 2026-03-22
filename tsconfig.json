@@ -1,13 +1,14 @@
 {
   "compilerOptions": {
-    "target": "ES6",                     // versión de JS resultante
-    "module": "commonjs",                // sistema de módulos
-    "rootDir": "./src",                  // carpeta de entrada
-    "outDir": "./dist",                  // carpeta de salida
-    "strict": true,                      // activa todas las comprobaciones estrictas
-    "esModuleInterop": true,             // compatibilidad con módulos ES
+    "target": "es2019",
+    "module": "commonjs",
+    "rootDir": "./src",
+    "outDir": "./dist",
+    "strict": true,
+    "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
-    "skipLibCheck": true
+    "skipLibCheck": true,
+    "types": ["node"]
   },
   "include": ["src"], 
   "exclude": ["node_modules"]
