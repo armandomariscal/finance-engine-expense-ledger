@@ -6,7 +6,7 @@ import {
   statementExists,
   listStatements,
 } from "./services/file.service";
-import { askAmount, askPeriod } from "./utils/validation";
+import { askAmount, askPeriod } from "./utils/input";
 import { logSuccess, logError, logWarning } from "./ui/logger";
 import { MENU_OPTIONS } from "./constants/menu";
 import { t } from "./i18n/messages";
