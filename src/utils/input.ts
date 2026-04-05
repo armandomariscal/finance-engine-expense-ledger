@@ -1,44 +1,50 @@
-import { logError } from "../ui/logger";
+import inquirer from "inquirer";
 import { CLI_EXIT } from "../constants/cli";
 import { periodSchema } from "../schemas/period.schema";
-
-
 import { amountSchema } from "../schemas/amount.schema";
+import { t } from "../i18n/messages";
 
-export function askAmount(prompt: (msg: string) => string, message: string): number {
-  while (true) {
-    const input = prompt(`${message} (o escribe 'exit'): `);
 
-    if (input.trim().toLowerCase() === CLI_EXIT) {
-      throw new Error("EXIT");
-    }
+export async function askPeriod(message: string): Promise<string> {
+  const { value } = await inquirer.prompt([
+    {
+      type: "input",
+      name: "value",
+      message: `${message} ${t("common.typeExit")}`,
+    },
+  ]);
 
-    const result = amountSchema.safeParse(input);
-
-    if (!result.success) {
-      logError(result.error.issues[0].message);
-      continue;
-    }
-
-    return result.data;
+  if (value.trim().toLowerCase() === CLI_EXIT) {
+    throw new Error("EXIT");
   }
+
+  const result = periodSchema.safeParse(value);
+
+  if (!result.success) {
+    throw new Error(result.error.issues[0].message);
+  }
+
+  return result.data;
 }
 
-export function askPeriod(prompt: (msg: string) => string, message: string): string {
-  while (true) {
-    const input = prompt(`\n${message} (o escribe 'exit'): `);
+export async function askAmount(message: string): Promise<number> {
+  const { value } = await inquirer.prompt([
+    {
+      type: "input",
+      name: "value",
+      message: `${message} ${t("common.typeExit")}`, 
+    },
+  ]);
 
-    if (input.trim().toLowerCase() === CLI_EXIT) {
-      throw new Error("EXIT");
-    }
-
-    const result = periodSchema.safeParse(input);
-
-    if (!result.success) {
-      logError(`\n${result.error.issues[0].message}\n`);
-      continue;
-    }
-
-    return result.data;
+  if (value.trim().toLowerCase() === CLI_EXIT) {
+    throw new Error("EXIT");
   }
+
+  const result = amountSchema.safeParse(value);
+
+  if (!result.success) {
+    throw new Error(result.error.issues[0].message);
+  }
+
+  return result.data;
 }

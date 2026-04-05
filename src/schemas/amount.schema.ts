@@ -10,8 +10,10 @@ export const amountSchema = z.preprocess(
   z
     .number()
     .refine((val) => !isNaN(val), {
-      message: "Monto inválido",
+      message: "errors.amount.invalid",
     })
-    .positive("El monto debe ser mayor a 0")
+    .positive({
+      message: "errors.amount.positive",
+    })
     .transform((val) => Number(val.toFixed(2)))
 );
