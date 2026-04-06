@@ -20,7 +20,19 @@ const messages = {
         },
         common: {
             exit: "Saliendo...",
-        }
+            cancel: "Operación cancelada",
+            typeExit: "(o escribe 'exit')"
+        },
+        errors: {
+            amount: {
+                invalid: "Monto inválido",
+                positive: "El monto debe ser mayor a 0",
+            },
+            period: {
+                invalidFormat: "Formato inválido. Usa YYYY-MM",
+                exists: "El periodo ya existe",
+            },
+        },
     },
     en: {
         title: "=== Finance Engine ===",
@@ -39,8 +51,20 @@ const messages = {
             empty: "No statements available",
             list: "Available statements:",
         },
+        errors: {
+            amount: {
+                invalid: "Invalid amount",
+                positive: "Amount must be greater than 0",
+            },
+            period: {
+                invalidFormat: "Invalid format. Use YYYY-MM",
+                exists: "Period already exists",
+            },
+        },
         common: {
             exit: "Exiting...",
+            cancel: "Operation cancelled",
+            typeExit: "(or type 'exit')"
         }
     },
 };
