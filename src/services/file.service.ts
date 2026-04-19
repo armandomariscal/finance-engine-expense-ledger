@@ -27,11 +27,24 @@ export function saveStatement(statement: Statement) {
   fs.writeFileSync(filePath, JSON.stringify(statement, null, 2));
 }
 
-export function listStatements(): string[] {
+export function listStatements(): Statement[] {
   ensureDataDir();
 
   return fs
     .readdirSync(DATA_DIR)
-    .filter(file => file.endsWith(".json"))
-    .map(file => file.replace(".json", ""));
+    .filter((file) => file.endsWith(".json"))
+    .map((file) => {
+      const filePath = path.join(DATA_DIR, file);
+      const content = fs.readFileSync(filePath, "utf-8");
+
+      const parsed = JSON.parse(content);
+
+      return {
+        ...parsed,
+        period: {
+          start: new Date(parsed.period.start),
+          end: new Date(parsed.period.end),
+        },
+      } as Statement;
+    });
 }
