@@ -112,15 +112,22 @@ async function main() {
 
   if (option === MENU_OPTIONS.VIEW_STATEMENTS) {
     const statements = listStatements();
-
-    if (statements.length === 0) {
-      logWarning(t("statement.empty"));
-    } else {
-      logSuccess(t("statement.list"));
-      statements.forEach((statement) =>
-        console.log("-", statement)
-      );
-    }
+      if (statements.length === 0) {
+        logWarning(t("statement.empty"));
+      } else {
+        const { selectedStatement } = await inquirer.prompt([
+          {
+            type: "list",
+            name: "selectedStatement",
+            message: t("statement.select"),
+            choices: statements.map((statement) => ({
+              name: `${statement.id} | Charges: ${statement.totals.charges} | Payments: ${statement.totals.payments}`,
+              value: statement,
+            })),
+          },
+        ]);
+        logSuccess(`Seleccionaste: ${selectedStatement.id}`);
+      }
   }
 
   if (option === MENU_OPTIONS.EXIT) {
