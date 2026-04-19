@@ -1,6 +1,7 @@
 import fs from "fs";
 import path from "path";
 import { Statement } from "../domain/statement";
+import { statementSchema } from "../schemas/statement.schema";
 
 const DATA_DIR = path.join(process.cwd(), "data");
 
@@ -34,17 +35,17 @@ export function listStatements(): Statement[] {
     .readdirSync(DATA_DIR)
     .filter((file) => file.endsWith(".json"))
     .map((file) => {
-      const filePath = path.join(DATA_DIR, file);
-      const content = fs.readFileSync(filePath, "utf-8");
+      try {
+        const filePath = path.join(DATA_DIR, file);
+        const content = fs.readFileSync(filePath, "utf-8");
 
-      const parsed = JSON.parse(content);
+        const parsed = JSON.parse(content);
 
-      return {
-        ...parsed,
-        period: {
-          start: new Date(parsed.period.start),
-          end: new Date(parsed.period.end),
-        },
-      } as Statement;
-    });
+        return statementSchema.parse(parsed);
+      } catch (error) {
+        console.error(`Invalid statement file: ${file}`);
+        return null;
+      }
+    })
+    .filter(Boolean) as Statement[];
 }
