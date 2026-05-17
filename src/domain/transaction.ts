@@ -1,13 +1,21 @@
+import { Category } from "./category";
+import { PaymentMethod } from "./payment";
+
 export type TransactionType = "charge" | "payment";
 
 export interface Transaction {
-    id: number;
+  id: string;
 
-    operationDate: Date;
-    postDate: Date;
+  operationDate: Date;
+  postDate: Date;
 
-    description: string;
-    amount: number;
+  description: string;
 
-    type: TransactionType;
+  amount: number;
+
+  type: TransactionType;
+
+  category?: Category;
+
+  paymentMethod?: PaymentMethod;
 }

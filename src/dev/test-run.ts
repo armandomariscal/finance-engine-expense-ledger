@@ -15,7 +15,7 @@ const statement: Statement = {
 };
 
 addTransaction(statement, {
-  id: 1,
+  id: crypto.randomUUID(),
   operationDate: new Date(),
   postDate: new Date(),
   description: "Test",

@@ -1,17 +1,17 @@
 import { Transaction } from "./transaction";
 
 export interface Statement {
-    id: string;
+  id: string;
 
-    period: {
-        start: Date;
-        end: Date;
-    };
+  period: {
+    start: Date;
+    end: Date;
+  };
 
-    totals: {
-        charges: number;
-        payments: number;
-    };
+  totals: {
+    charges: number;
+    payments: number;
+  };
 
-    transactions: Transaction[];
+  transactions: Transaction[];
 }
