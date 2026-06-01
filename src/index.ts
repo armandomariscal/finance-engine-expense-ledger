@@ -1,14 +1,12 @@
 import "dotenv/config";
 import { Statement } from "./domain/statement";
-import {
-  saveStatement,
-  listStatements,
-} from "./services/file.service";
+import { saveStatement, listStatements } from "./services/file.service";
 import { askAmount, askPeriod } from "./utils/input";
 import { logSuccess, logError, logWarning } from "./ui/logger";
 import { MENU_OPTIONS } from "./constants/menu";
 import { t } from "./i18n/messages";
 import inquirer from "inquirer";
+import { displayStatement } from "./ui/statement-view";
 
 function getPeriodDates(id: string) {
   const [year, month] = id.split("-").map(Number);
@@ -112,22 +110,23 @@ async function main() {
 
   if (option === MENU_OPTIONS.VIEW_STATEMENTS) {
     const statements = listStatements();
-      if (statements.length === 0) {
-        logWarning(t("statement.empty"));
-      } else {
-        const { selectedStatement } = await inquirer.prompt([
-          {
-            type: "list",
-            name: "selectedStatement",
-            message: t("statement.select"),
-            choices: statements.map((statement) => ({
-              name: `${statement.id} | Charges: ${statement.totals.charges} | Payments: ${statement.totals.payments}`,
-              value: statement,
-            })),
-          },
-        ]);
-        logSuccess(`Seleccionaste: ${selectedStatement.id}`);
-      }
+    if (statements.length === 0) {
+      logWarning(t("statement.empty"));
+    } else {
+      const { selectedStatement } = await inquirer.prompt([
+        {
+          type: "list",
+          name: "selectedStatement",
+          message: t("statement.select"),
+          choices: statements.map((statement) => ({
+            name: `${statement.id} | Charges: ${statement.totals.charges} | Payments: ${statement.totals.payments}`,
+            value: statement,
+          })),
+        },
+      ]);
+      logSuccess(`Seleccionaste: ${selectedStatement.id}`);
+      displayStatement(selectedStatement);
+    }
   }
 
   if (option === MENU_OPTIONS.EXIT) {
