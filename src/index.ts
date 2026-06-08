@@ -6,6 +6,7 @@ import { logSuccess, logError, logWarning } from "./ui/logger";
 import { MENU_OPTIONS } from "./constants/menu";
 import { t } from "./i18n/messages";
 import inquirer from "inquirer";
+import { displayStatement } from "./ui/statement-view";
 
 async function main() {
   console.log(t("title"));
@@ -75,6 +76,7 @@ async function main() {
         },
       ]);
       logSuccess(`Seleccionaste: ${selectedStatement.id}`);
+      displayStatement(selectedStatement);
     }
   }
 
