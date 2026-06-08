@@ -2,8 +2,8 @@ import inquirer from "inquirer";
 import { CLI_EXIT } from "../constants/cli";
 import { periodSchema } from "../schemas/period.schema";
 import { amountSchema } from "../schemas/amount.schema";
+import { logError } from "../ui/logger";
 import { t } from "../i18n/messages";
-
 
 export async function askPeriod(message: string): Promise<string> {
   const { value } = await inquirer.prompt([
@@ -32,7 +32,7 @@ export async function askAmount(message: string): Promise<number> {
     {
       type: "input",
       name: "value",
-      message: `${message} ${t("common.typeExit")}`, 
+      message: `${message} ${t("common.typeExit")}`,
     },
   ]);
 
@@ -47,4 +47,18 @@ export async function askAmount(message: string): Promise<number> {
   }
 
   return result.data;
+}
+
+export async function promptUntilValid<T>(fn: () => Promise<T>): Promise<T> {
+  while (true) {
+    try {
+      return await fn();
+    } catch (error) {
+      if ((error as Error).message === "EXIT") {
+        throw error;
+      }
+
+      logError(t((error as Error).message));
+    }
+  }
 }
