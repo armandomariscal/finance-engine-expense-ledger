@@ -1,4 +1,5 @@
 import "dotenv/config";
+<<<<<<< Updated upstream
 import { saveStatement, listStatements } from "./services/file.service";
 import { askAmount, askPeriod, promptUntilValid } from "./utils/input";
 import { createStatement } from "./domain/statement.factory";
@@ -87,3 +88,8 @@ async function main() {
 }
 
 main();
+=======
+import { runApp } from "./app";
+
+runApp();
+>>>>>>> Stashed changes
