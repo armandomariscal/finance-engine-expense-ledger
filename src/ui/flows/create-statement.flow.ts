@@ -1,6 +1,6 @@
 import { askAmount, askPeriod, promptUntilValid } from "../../utils/input";
 import { createStatement } from "../../domain/statement.factory";
-import { saveStatement } from "../../services/file.service";
+import { saveStatement } from "../../infrastructure/persistence/statement.repository";
 import { logError, logSuccess, logWarning } from "../../ui/logger";
 import { t } from "../../i18n/messages";
 
