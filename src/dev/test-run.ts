@@ -1,11 +1,12 @@
 import { Statement } from "../domain/statement";
 import { addTransaction, getTotals } from "../services/statement.service";
 
+const now = new Date();
 const statement: Statement = {
   id: "test",
   period: {
-    start: new Date(),
-    end: new Date(),
+    start: now,
+    end: now,
   },
   totals: {
     charges: 1000,
@@ -16,8 +17,8 @@ const statement: Statement = {
 
 addTransaction(statement, {
   id: crypto.randomUUID(),
-  operationDate: new Date(),
-  postDate: new Date(),
+  operationDate: now,
+  postDate: now,
   description: "Test",
   amount: 200,
   type: "charge",
