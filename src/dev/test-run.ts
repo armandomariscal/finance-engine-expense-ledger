@@ -15,14 +15,16 @@ const statement: Statement = {
   transactions: [],
 };
 
-addTransaction(statement, {
+const transaction = {
   id: crypto.randomUUID(),
   operationDate: now,
   postDate: now,
   description: "Test",
   amount: 200,
   type: "charge",
-});
+};
+
+addTransaction(statement, transaction);
 
 console.log(getTotals(statement.transactions));
 console.log(JSON.stringify(statement, null, 2));
