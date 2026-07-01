@@ -1,4 +1,5 @@
 import { Statement } from "../domain/statement";
+import { Transaction } from "../domain/transaction";
 import { addTransaction, getTotals } from "../services/statement.service";
 
 const now = new Date();
@@ -15,7 +16,7 @@ const statement: Statement = {
   transactions: [],
 };
 
-const transaction = {
+const transaction: Transaction = {
   id: crypto.randomUUID(),
   operationDate: now,
   postDate: now,
@@ -24,7 +25,7 @@ const transaction = {
   type: "charge",
 };
 
-addTransaction(statement, transaction);
+const updatedStatement = addTransaction(statement, transaction);
 
-console.log(getTotals(statement.transactions));
-console.log(JSON.stringify(statement, null, 2));
+console.log(getTotals(updatedStatement.transactions));
+console.log(JSON.stringify(updatedStatement, null, 2));
