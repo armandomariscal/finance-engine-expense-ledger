@@ -8,7 +8,7 @@ export function getTotals(transactions: Transaction[]) {
       if (tx.type === "payment") acc.payments += tx.amount;
       return acc;
     },
-    { charges: 0, payments: 0 }
+    { charges: 0, payments: 0 },
   );
 }
 
@@ -28,4 +28,5 @@ export function addTransaction(statement: Statement, tx: Transaction) {
   }
 
   statement.transactions.push(tx);
+  return statement;
 }
